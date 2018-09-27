@@ -1,5 +1,11 @@
 plugins {
     id 'java'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+}
+
+lombok {
+    version = '1.18.2'
+    sha256 = ""
 }
 
 group 'com.maiorovi'
@@ -12,6 +18,11 @@ repositories {
 }
 
 dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.0.5.RELEASE'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.2'
+    compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.9.7'
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.0.5.RELEASE'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'
 }
