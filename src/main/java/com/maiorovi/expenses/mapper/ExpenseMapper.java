@@ -16,7 +16,13 @@ public class ExpenseMapper implements Mapper<ExpenseDto, Expense> {
 
     @Override
     public ExpenseDto toDataTransferObject(Expense expense) {
-        return null;
+        String formattedDate = expense.getDate().format(formatter);
+
+        return ExpenseDto.builder()
+                .owner(expense.getOwner())
+                .date(formattedDate)
+                .description(expense.getDescription())
+                .build();
     }
 
     @Override

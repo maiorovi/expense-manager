@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -58,11 +55,18 @@ public class ExpenseController {
         }
     }
 
-//    @GetMapping(path = "expenses/{id}")
-//    public Mono<ServerResponse> expenseById(@PathVariable("id") int id) {
-//        Mono<Expense> expenseById = expenseService.getExpenseById(String.valueOf(id));
-//        return ServerResponse.ok()
-//                .body(expenseService::getExpenseById, ExpenseDto.class);
+    @GetMapping(path = "expenses/{id}")
+    public Mono<ResponseEntity<ExpenseDto>> findExpenseById(@PathVariable("id") int id) {
+        Mono<Expense> expenseById = expenseService.getExpenseById(String.valueOf(id));
+
+        return expenseById.map(exp -> expenseMapper.toDataTransferObject(exp))
+                .map(ResponseEntity::ok)
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+    }
+
+//    @GetMapping(path = "expenses")
+//    public Mono<ResponseEntity<List<Expense>>> findAllExpenses() {
+//        return expenseService.findAllExpenses().toIterable();
 //    }
 
 }

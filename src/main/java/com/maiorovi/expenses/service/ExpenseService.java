@@ -4,6 +4,7 @@ import com.maiorovi.expenses.domain.Expense;
 import com.maiorovi.expenses.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -24,4 +25,7 @@ public class ExpenseService {
         return expenseRepository.findById(id);
     }
 
+    public Flux<Expense> findAllExpenses() {
+        return expenseRepository.findAll();
+    }
 }
