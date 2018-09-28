@@ -1,16 +1,18 @@
 package com.maiorovi.expenses.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ExpenseDto {
 
-    private final String owner;
-    private final LocalDate date;
-    private final String description;
+    private String owner;
+    private String date;
+    private String description;
 
 }

@@ -7,11 +7,15 @@ import com.maiorovi.expenses.service.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 public class ExpenseController {
@@ -34,15 +38,24 @@ public class ExpenseController {
     }
 
     @PostMapping(path = "expenses", consumes = "application/json")
-    public Mono<ServerResponse> expense(ExpenseDto expenseData) {
+    public Mono<ResponseEntity<String>> expense(@RequestBody ExpenseDto expenseData) {
         LOG.info("Processing new expense");
 
         Expense expense = expenseMapper.toDomainObject(expenseData);
 
-        expenseService.processNewExpense(expense);
+        return expenseService.processNewExpense(expense)
+                            .map(id -> ResponseEntity.created(newURI("expenses/" + id)).build());
 
-        return ServerResponse.ok()
-                .body(s -> s.onNext("this is a body"), String.class);
+    }
+
+    private URI newURI(String path) {
+        final String httpAddress = "http://localhost:8080";
+
+        try {
+            return new URI(httpAddress + "/"+ path);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 //    @GetMapping(path = "expenses/{id}")

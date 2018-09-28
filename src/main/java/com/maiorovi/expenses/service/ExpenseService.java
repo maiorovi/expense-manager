@@ -15,8 +15,8 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public void processNewExpense(Expense expense) {
-        expenseRepository.save(expense);
+    public Mono<String> processNewExpense(Expense expense) {
+        return expenseRepository.save(expense);
     }
 
 

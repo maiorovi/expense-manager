@@ -24,8 +24,9 @@ public class MapBasedExpenseRepository implements ExpenseRepository {
     }
 
     @Override
-    public void save(Expense expense) {
+    public Mono<String> save(Expense expense) {
         expenses.putIfAbsent(expense.getId(), expense);
+        return Mono.just(expense.getId());
     }
 
     @Override
